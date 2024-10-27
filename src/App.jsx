@@ -13,8 +13,25 @@ function App() {
   ];
 
   const handleAddToCart = (productInfo) => {
-    setCartProducts([...cartProducts, productInfo])
+    const existingProduct = cartProducts.find((item) => item.id === productInfo.id);
+
+    if (existingProduct) {
+      setCartProducts(
+        cartProducts.map((item) => item.id === productInfo.id ? { ...item, quantity: item.quantity + 1 } : item)
+      )
+    } else {
+      setCartProducts([...cartProducts, { ...productInfo, quantity: 1 }])
+    }
   }
+
+  const increaseQuantity = (id) => {
+    setCartProducts(
+      cartProducts.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
+  };
+
 
   return (
     <div className="flex gap-5 my-5">
@@ -32,9 +49,12 @@ function App() {
               <div key={product.id} className="card w-96 bg-base-100 shadow-xl">
                 <div className="card-body">
                   <h2 className="card-title">{product?.name}</h2>
-                  <p>Price: 100</p>
+                  <p>Price: {product?.price}</p>
+                  {
+                    product?.quantity && <p>Quantity: {product?.quantity}</p>
+                  }
                   <div className="card-actions justify-end">
-                    <button className="btn btn-primary"> + </button>
+                    <button onClick={() => increaseQuantity(product.id)} className="btn btn-primary"> + </button>
                     <button className="btn btn-primary"> - </button>
                   </div>
                 </div>
