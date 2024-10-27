@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard/ProductCard";
 
 function App() {
   const [cartProducts, setCartProducts] = useState([]);
+  const [totalCost, setTotalCost] = useState(0);
 
   const products = [
     { id: 1, name: "Product A", price: 10 },
@@ -45,9 +46,17 @@ function App() {
     );
   };
 
+  useEffect(() => {
+    let total = 0;
+    for (let i = 0; i < cartProducts.length; i++) {
+      total = total + cartProducts[i].price * cartProducts[i].quantity;
+    }
+    setTotalCost(total);
+  }, [cartProducts]);
+
   return (
-    <div className="flex gap-5 my-5 mx-3">
-      <div className="grid grid-cols-2 gap-3">
+    <div className="lg:flex gap-5 my-5 mx-3">
+      <div className="grid lg:grid-cols-2 grid-cols-1 gap-3">
         {
           products.map((product) => <ProductCard key={product.id} product={product} handleAddToCart={handleAddToCart} />)
         }
@@ -74,10 +83,10 @@ function App() {
             )
           })
         }
-        <h1 className="text-xl font-bold mt-4">Total Cost: 100</h1>
+        <h1 className="text-xl font-bold mt-4">Total Cost: {totalCost}</h1>
       </div>
     </div>
   )
 }
 
-export default App
+export default App;
