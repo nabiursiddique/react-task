@@ -33,20 +33,32 @@ function App() {
   };
 
 
+  const decreaseQuantity = (id) => {
+    setCartProducts(
+      cartProducts
+        .map((item) =>
+          item.id === id && item.quantity > 1
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        )
+        .filter((item) => item.quantity > 0)
+    );
+  };
+
   return (
-    <div className="flex gap-5 my-5">
+    <div className="flex gap-5 my-5 mx-3">
       <div className="grid grid-cols-2 gap-3">
         {
           products.map((product) => <ProductCard key={product.id} product={product} handleAddToCart={handleAddToCart} />)
         }
       </div>
       <div className="ml-5">
-        <h1 className="text-2xl font-bold">Cart</h1>
+        <h1 className="text-3xl font-bold text-center">Cart</h1>
         {/* cart card */}
         {
           cartProducts?.map((product) => {
             return (
-              <div key={product.id} className="card w-96 bg-base-100 shadow-xl">
+              <div key={product.id} className="card w-96 bg-base-100 shadow-xl mb-2">
                 <div className="card-body">
                   <h2 className="card-title">{product?.name}</h2>
                   <p>Price: {product?.price}</p>
@@ -55,14 +67,14 @@ function App() {
                   }
                   <div className="card-actions justify-end">
                     <button onClick={() => increaseQuantity(product.id)} className="btn btn-primary"> + </button>
-                    <button className="btn btn-primary"> - </button>
+                    <button onClick={() => decreaseQuantity(product.id)} className="btn btn-primary"> - </button>
                   </div>
                 </div>
               </div>
             )
           })
-
         }
+        <h1 className="text-xl font-bold mt-4">Total Cost: 100</h1>
       </div>
     </div>
   )
